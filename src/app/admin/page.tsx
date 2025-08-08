@@ -19,33 +19,57 @@ const AdminPage = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [meetingRooms, setMeetingRooms] = useState<MeetingRoom[]>([
         {
-            id: 'general-room',
-            name: 'General Room',
+            id: 'general',
+            name: 'General',
             level: 'all',
             status: 'idle',
             participantCount: 0,
             recordingStatus: 'not-recording'
         },
         {
-            id: 'beginner-room',
-            name: 'Beginner Room',
+            id: 'general-2',
+            name: 'General 2',
+            level: 'all',
+            status: 'idle',
+            participantCount: 0,
+            recordingStatus: 'not-recording'
+        },
+        {
+            id: 'beginner-scratch',
+            name: 'Beginner Scratch',
             level: 'beginner',
             status: 'idle',
             participantCount: 0,
             recordingStatus: 'not-recording'
         },
         {
-            id: 'intermediate-room',
-            name: 'Intermediate Room',
+            id: 'intermediate-scratch',
+            name: 'Intermediate Scratch',
             level: 'intermediate',
             status: 'idle',
             participantCount: 0,
             recordingStatus: 'not-recording'
         },
         {
-            id: 'elite-room',
-            name: 'Elite Room',
-            level: 'elite',
+            id: 'python-1',
+            name: 'Python 1',
+            level: 'python',
+            status: 'idle',
+            participantCount: 0,
+            recordingStatus: 'not-recording'
+        },
+        {
+            id: 'python-2',
+            name: 'Python 2',
+            level: 'python',
+            status: 'idle',
+            participantCount: 0,
+            recordingStatus: 'not-recording'
+        },
+        {
+            id: 'web-dev',
+            name: 'Web Dev',
+            level: 'web',
             status: 'idle',
             participantCount: 0,
             recordingStatus: 'not-recording'
@@ -54,9 +78,7 @@ const AdminPage = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        // Check if user is admin (you can implement your own admin check logic)
         const checkAdminAccess = () => {
-            // For demo purposes, you can set a localStorage flag or check against a list of admin users
             const currentUser = localStorage.getItem("name");
             
             if (currentUser === process.env.NEXT_PUBLIC_ADMIN_USERNAME) {
@@ -177,23 +199,27 @@ const AdminPage = () => {
             // Determine the level based on room ID
             let level = "all";
             switch (roomId) {
-                case "beginner-room":
+                case "beginner-scratch":
                     level = "beginner";
                     break;
-                case "intermediate-room":
+                case "intermediate-scratch":
                     level = "intermediate";
                     break;
-                case "elite-room":
-                    level = "elite";
+                case "python-1":
+                case "python-2":
+                    level = "python";
                     break;
-                case "general-room":
+                case "web-dev":
+                    level = "web";
+                    break;
+                case "general":
+                case "general-2":
                 default:
                     level = "all";
                     break;
             }
 
-            // Use the same API endpoint as regular users but with admin name
-            const response = await fetch(`/api/bbb?name=${encodeURIComponent(adminName)}&level=${level}`);
+            const response = await fetch(`/api/bbb?name=${encodeURIComponent(adminName)}&level=${level}&roomId=${roomId}`);
             const data = await response.json();
 
             if (data.joinUrl) {
@@ -386,45 +412,7 @@ const AdminPage = () => {
                     ))}
                 </div>
 
-                {/* Quick Actions */}
-                <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h3>
-                    <div className="grid md:grid-cols-3 gap-4">
-                        <button
-                            onClick={() => {
-                                meetingRooms.forEach(room => {
-                                    if (room.status === 'stopped' || room.status === 'idle') {
-                                        startMeeting(room.id);
-                                    }
-                                });
-                            }}
-                            disabled={isLoading}
-                            className="bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
-                        >
-                            Start All Meetings
-                        </button>
-                        <button
-                            onClick={() => {
-                                meetingRooms.forEach(room => {
-                                    if (room.status === 'running') {
-                                        stopMeeting(room.id);
-                                    }
-                                });
-                            }}
-                            disabled={isLoading}
-                            className="bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
-                        >
-                            Stop All Meetings
-                        </button>
-                        <button
-                            onClick={fetchMeetingStatuses}
-                            disabled={isLoading}
-                            className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                        >
-                            Refresh All Status
-                        </button>
-                    </div>
-                </div>
+
             </div>
         </div>
     );

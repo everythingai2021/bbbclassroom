@@ -32,14 +32,20 @@ export const POST = async (req: Request) => {
         // Get meeting name based on meeting ID
         const getMeetingName = (id: string) => {
             switch (id) {
-                case 'general-room':
-                    return 'General Room';
-                case 'beginner-room':
-                    return 'Beginner Room';
-                case 'intermediate-room':
-                    return 'Intermediate Room';
-                case 'elite-room':
-                    return 'Elite Room';
+                case 'general':
+                    return 'General';
+                case 'general-2':
+                    return 'General 2';
+                case 'beginner-scratch':
+                    return 'Beginner Scratch';
+                case 'intermediate-scratch':
+                    return 'Intermediate Scratch';
+                case 'python-1':
+                    return 'Python 1';
+                case 'python-2':
+                    return 'Python 2';
+                case 'web-dev':
+                    return 'Web Dev';
                 default:
                     return id;
             }

@@ -18,20 +18,27 @@ export const GET = async (req: Request) => {
         }
 
         const level = searchParams.get('level') as string;
+        const roomId = searchParams.get('roomId') as string;
 
-        let meetingID = process.env.NEXT_PUBLIC_GENERAL_ID as string;
+        // Use roomId if provided, otherwise fall back to level-based mapping
+        let meetingID = roomId || process.env.NEXT_PUBLIC_GENERAL_ID as string;
 
-        //Set the meeting ID based on the level
-        switch (level) {
-            case "beginner":
-                meetingID = process.env.NEXT_PUBLIC_BEGINNER_ID as string;
-                break;
-            case "intermediate":
-                meetingID = process.env.NEXT_PUBLIC_INTERMEDIATE_ID as string;
-                break;
-            case "elite":
-                meetingID = process.env.NEXT_PUBLIC_ELITE_ID as string;
-                break;
+        // If no roomId provided, use level-based mapping as fallback
+        if (!roomId) {
+            switch (level) {
+                case "beginner":
+                    meetingID = process.env.NEXT_PUBLIC_BEGINNER_ID as string;
+                    break;
+                case "intermediate":
+                    meetingID = process.env.NEXT_PUBLIC_INTERMEDIATE_ID as string;
+                    break;
+                case "python":
+                    meetingID = process.env.NEXT_PUBLIC_PYTHON_ID as string;
+                    break;
+                case "web":
+                    meetingID = process.env.NEXT_PUBLIC_WEB_ID as string;
+                    break;
+            }
         }
 
         const bbbUrl = process.env.NEXT_PUBLIC_BBB_URL as string;

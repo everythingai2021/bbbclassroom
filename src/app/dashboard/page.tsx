@@ -22,29 +22,10 @@ const DashboardPage = () => {
         setLevel(level || "");
     }, [router]);
 
-    const handleGeneralMeetingRoom = async () => {
+    const handleJoinRoom = async (roomId: string) => {
         setIsLoading(true);
         try {
-            const response = await fetch("/api/bbb?name=" + name);
-            const data = await response.json();
-
-            if (data.joinUrl) {
-                setMeetingUrl(data.joinUrl);
-                setSidebarOpen(false); // Close sidebar on mobile when meeting starts
-            } else {
-                alert("No meeting found");
-            }
-        } catch {
-            alert("Error joining meeting");
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-    const handleGroupMeetingRoom = async () => {
-        setIsLoading(true);
-        try {
-            const response = await fetch("/api/bbb?name=" + name + "&level=" + level);
+            const response = await fetch(`/api/bbb?name=${encodeURIComponent(name)}&roomId=${roomId}`);
             const data = await response.json();
 
             if (data.joinUrl) {
@@ -109,51 +90,104 @@ const DashboardPage = () => {
                         </div>
 
                         {/* Meeting Controls */}
-                        <div className="space-y-4 flex-1">
-                            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 hover:shadow-md transition-shadow">
-                                <div className="text-center">
-                                    <div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center mx-auto mb-3">
-                                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-2">General Meeting</h3>
-                                    <p className="text-sm text-gray-600 mb-4">Join the main meeting room for all participants</p>
-                                    <button 
-                                        className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
-                                            isLoading 
-                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                                                : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
-                                        }`}
-                                        onClick={handleGeneralMeetingRoom}
-                                        disabled={isLoading}
-                                    >
-                                        {isLoading ? 'Joining...' : 'Join General Meeting'}
-                                    </button>
-                                </div>
+                        <div className="space-y-3 flex-1">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4">Available Rooms</h3>
+                            
+                            {/* General Rooms */}
+                            <div className="space-y-2">
+                                <h4 className="text-sm font-medium text-gray-600">General</h4>
+                                <button 
+                                    className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                        isLoading 
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                            : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
+                                    }`}
+                                    onClick={() => handleJoinRoom('general')}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Joining...' : 'General'}
+                                </button>
+                                <button 
+                                    className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                        isLoading 
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                            : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
+                                    }`}
+                                    onClick={() => handleJoinRoom('general-2')}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Joining...' : 'General 2'}
+                                </button>
                             </div>
 
-                            <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6 hover:shadow-md transition-shadow">
-                                <div className="text-center">
-                                    <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center mx-auto mb-3">
-                                        <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                                        </svg>
-                                    </div>
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Group Meeting</h3>
-                                    <p className="text-sm text-gray-600 mb-4">Join your level-specific group meeting</p>
-                                    <button 
-                                        className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
-                                            isLoading 
-                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                                                : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg'
-                                        }`}
-                                        onClick={handleGroupMeetingRoom}
-                                        disabled={isLoading}
-                                    >
-                                        {isLoading ? 'Joining...' : 'Join Group Meeting'}
-                                    </button>
-                                </div>
+                            {/* Scratch Rooms */}
+                            <div className="space-y-2">
+                                <h4 className="text-sm font-medium text-gray-600">Scratch</h4>
+                                <button 
+                                    className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                        isLoading 
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                            : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg'
+                                    }`}
+                                    onClick={() => handleJoinRoom('beginner-scratch')}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Joining...' : 'Beginner Scratch'}
+                                </button>
+                                <button 
+                                    className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                        isLoading 
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                            : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg'
+                                    }`}
+                                    onClick={() => handleJoinRoom('intermediate-scratch')}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Joining...' : 'Intermediate Scratch'}
+                                </button>
+                            </div>
+
+                            {/* Python Rooms */}
+                            <div className="space-y-2">
+                                <h4 className="text-sm font-medium text-gray-600">Python</h4>
+                                <button 
+                                    className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                        isLoading 
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                            : 'bg-yellow-600 text-white hover:bg-yellow-700 hover:shadow-lg'
+                                    }`}
+                                    onClick={() => handleJoinRoom('python-1')}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Joining...' : 'Python 1'}
+                                </button>
+                                <button 
+                                    className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                        isLoading 
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                            : 'bg-yellow-600 text-white hover:bg-yellow-700 hover:shadow-lg'
+                                    }`}
+                                    onClick={() => handleJoinRoom('python-2')}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Joining...' : 'Python 2'}
+                                </button>
+                            </div>
+
+                            {/* Web Dev Room */}
+                            <div className="space-y-2">
+                                <h4 className="text-sm font-medium text-gray-600">Web Development</h4>
+                                <button 
+                                    className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 ${
+                                        isLoading 
+                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                            : 'bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg'
+                                    }`}
+                                    onClick={() => handleJoinRoom('web-dev')}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Joining...' : 'Web Dev'}
+                                </button>
                             </div>
                         </div>
                     </div>
