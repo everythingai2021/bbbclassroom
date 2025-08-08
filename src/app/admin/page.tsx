@@ -3,13 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-interface MeetingInfo {
-    meetingID: string;
-    meetingName: string;
-    participantCount: number;
-    running: boolean;
-    exists: boolean;
-}
+
 
 interface MeetingRoom {
     id: string;
@@ -74,7 +68,7 @@ const AdminPage = () => {
         };
 
         checkAdminAccess();
-    }, []);
+    }, [router]);
 
     const fetchMeetingStatuses = async () => {
         setIsLoading(true);
@@ -289,7 +283,7 @@ const AdminPage = () => {
                         </svg>
                     </div>
                     <h1 className="text-2xl font-bold text-gray-800 mb-2">Access Denied</h1>
-                    <p className="text-gray-600">You don't have permission to access the admin panel</p>
+                    <p className="text-gray-600">You don&apos;t have permission to access the admin panel</p>
                 </div>
             </div>
         );

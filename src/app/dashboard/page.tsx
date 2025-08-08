@@ -20,7 +20,7 @@ const DashboardPage = () => {
         }
         setName(name || "");
         setLevel(level || "");
-    }, []);
+    }, [router]);
 
     const handleGeneralMeetingRoom = async () => {
         setIsLoading(true);
@@ -34,7 +34,7 @@ const DashboardPage = () => {
             } else {
                 alert("No meeting found");
             }
-        } catch (error) {
+        } catch {
             alert("Error joining meeting");
         } finally {
             setIsLoading(false);
@@ -53,7 +53,7 @@ const DashboardPage = () => {
             } else {
                 alert("No meeting found");
             }
-        } catch (error) {
+        } catch {
             alert("Error joining meeting");
         } finally {
             setIsLoading(false);

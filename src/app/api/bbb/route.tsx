@@ -106,9 +106,7 @@ const checkMeetingStatus = async (queryString: string, bbbSecret: string) => {
 // Helper function to parse BigBlueButton XML response
 const parseMeetingInfoXML = (xmlText: string) => {
     try {
-        // Simple XML parsing using regex (for basic info)
-        // For more complex parsing, consider using a library like 'xml2js'
-        
+        //Check if the meeting exists
         const meetingExists = xmlText.includes('<meetingID>');
         const hasError = xmlText.includes('<returncode>FAILED</returncode>');
         

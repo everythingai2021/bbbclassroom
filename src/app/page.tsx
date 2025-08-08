@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { InfoForm } from "./components/InfoForm";
 
 export default function Home() {
