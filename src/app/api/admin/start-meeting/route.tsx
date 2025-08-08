@@ -21,7 +21,7 @@ export const POST = async (req: Request) => {
 
         const bbbUrl = process.env.NEXT_PUBLIC_BBB_URL as string;
         const bbbSecret = process.env.NEXT_PUBLIC_BBB_SECRET as string;
-
+        console.log(bbbUrl, bbbSecret);
         if (!bbbUrl || !bbbSecret) {
             return NextResponse.json({ 
                 success: false,
